@@ -1,8 +1,9 @@
+import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
-import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
-import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout";
+import { getAvatarUrl, handleAvatarError } from "../lib/avatar";
+import ThemeSelector from "./ThemeSelector";
 const Navbar = () => {
 
   const {authUser} = useAuthUser();
@@ -47,7 +48,11 @@ const Navbar = () => {
 
           <div className="avatar">
             <div className="w-9 rounded-full">
-              <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
+              <img
+                src={getAvatarUrl(authUser?.profilePic)}
+                alt="User Avatar"
+                onError={handleAvatarError}
+              />
             </div>
           </div>
 

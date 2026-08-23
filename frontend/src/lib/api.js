@@ -63,3 +63,8 @@ export async function getStreamToken() {
   const response = await axiosInstance.get("/chat/token");
   return response.data;
 }
+
+export async function syncStreamUser(userId) {
+  const response = await axiosInstance.post(`/chat/user/${userId}`);
+  return response.data;
+}

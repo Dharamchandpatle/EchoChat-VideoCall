@@ -1,10 +1,11 @@
-import { useState } from "react";
-import useAuthUser from "../hooks/useAuthUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { completeOnboarding } from "../lib/api";
 import { LoaderIcon, MapPinIcon, ShipWheelIcon, ShuffleIcon } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { LANGUAGES } from "../constants";
+import useAuthUser from "../hooks/useAuthUser";
+import { completeOnboarding } from "../lib/api";
+import { getAvatarUrl, handleAvatarError } from "../lib/avatar";
 
 const OnboardingPage = () => {
   const { authUser } = useAuthUser();
@@ -37,13 +38,18 @@ const OnboardingPage = () => {
     onboardingMutation(formState);
   };
 
+{/* Profile Avatar */}
   const handleRandomAvatar = () => {
-    const idx = Math.floor(Math.random() * 100) + 1; // 1-100 included
-    const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
+    const seed = Math.random().toString(36).substring(2);
+    const randomAvatar = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
 
-    setFormState({ ...formState, profilePic: randomAvatar });
-    toast.success("Random profile picture generated!");
-  };
+    setFormState((prev) => ({
+      ...prev,
+      profilePic: randomAvatar,
+    }));
+
+  toast.success("Random profile picture generated!");
+};
 
   return (
     <div className="min-h-screen bg-base-100 flex items-center justify-center p-4">
@@ -58,9 +64,10 @@ const OnboardingPage = () => {
               <div className="size-32 rounded-full bg-base-300 overflow-hidden">
                 {formState.profilePic ? (
                   <img
-                    src={formState.profilePic}
+                    src={getAvatarUrl(formState.profilePic)}
                     alt="Profile Preview"
                     className="w-full h-full object-cover"
+                    onError={handleAvatarError}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full">
