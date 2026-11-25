@@ -2,6 +2,7 @@ import { Loader, MessageCircle, Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
+import AiStatusBadge from "./AiStatusBadge";
 
 export default function FloatingChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,9 @@ export default function FloatingChatBot() {
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
-    if (!inputValue.trim()) return;
+    // One request at a time: ignore repeated submits while a reply is pending.
+    if (isLoading || !inputValue.trim()) return;
+    const history = messages.slice(-8).map((m) => ({ role: m.sender === "user" ? "user" : "assistant", text: m.text }));
 
     // Add user message
     const userMessage = {
@@ -47,6 +50,7 @@ export default function FloatingChatBot() {
       const response = await axiosInstance.post("/ai/chat", {
         message: inputValue,
         language: language,
+        history,
       });
 
       const botMessage = {
@@ -73,50 +77,6 @@ export default function FloatingChatBot() {
     }
   };
 
-  const handleTranslate = async () => {
-    if (!inputValue.trim()) return;
-
-    const textToTranslate = inputValue;
-    setInputValue("");
-    setIsLoading(true);
-
-    try {
-      const response = await axiosInstance.post("/ai/translate", {
-        text: textToTranslate,
-        targetLanguage: language,
-      });
-
-      const userMessage = {
-        id: messages.length + 1,
-        text: `Translate to ${language}: ${textToTranslate}`,
-        sender: "user",
-        timestamp: new Date(),
-      };
-
-      const botMessage = {
-        id: messages.length + 2,
-        text: `Translation: ${response.data.translatedText}`,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, userMessage, botMessage]);
-    } catch (error) {
-      console.error("Error translating:", error);
-      const errorText = error.response?.data?.error || "Sorry, translation failed. Please try again.";
-      toast.error(errorText);
-      const errorMessage = {
-        id: messages.length + 1,
-        text: errorText,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {/* Chat Window */}
@@ -126,6 +86,7 @@ export default function FloatingChatBot() {
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
             <div>
               <h3 className="font-bold text-lg">AI Assistant</h3>
+                <div className="mt-1"><AiStatusBadge /></div>
               <p className="text-xs opacity-90">Powered by Gemini</p>
             </div>
             <button

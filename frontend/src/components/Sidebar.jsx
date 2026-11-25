@@ -1,4 +1,4 @@
-import { BellIcon, HomeIcon, ShipWheelIcon, UsersIcon } from "lucide-react";
+import { BellIcon, GraduationCap, HomeIcon, Languages, ShieldCheck, ShipWheelIcon, UsersIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import { getAvatarUrl, handleAvatarError } from "../lib/avatar";
@@ -49,6 +49,31 @@ const Sidebar = () => {
           <BellIcon className="size-5 text-base-content opacity-70" />
           <span>Notifications</span>
         </Link>
+
+        {/* Indian Languages Learning Link */}
+        <Link
+          to="/learn/dashboard"
+          className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
+            currentPath.startsWith("/learn") ? "btn-active" : ""
+          }`}
+        >
+          <GraduationCap className="size-5 text-primary" />
+          <span>Learn Languages</span>
+          <span className="badge badge-primary badge-xs ml-auto">New</span>
+        </Link>
+
+        {/* Admin Link if admin */}
+        {authUser?.role === "admin" && (
+          <Link
+            to="/admin/learning"
+            className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
+              currentPath.startsWith("/admin") ? "btn-active" : ""
+            }`}
+          >
+            <ShieldCheck className="size-5 text-accent" />
+            <span>Learning Admin</span>
+          </Link>
+        )}
       </nav>
 
       {/* USER PROFILE SECTION */}

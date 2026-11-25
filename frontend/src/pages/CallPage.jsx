@@ -36,25 +36,28 @@ const CallPage = () => {
   });
 
   useEffect(() => {
+    let callInstance = null;
+    let videoClient = null;
+
     const initCall = async () => {
-      if (!tokenData.token || !authUser || !callId) return;
+      if (!tokenData?.token || !authUser || !callId || !STREAM_API_KEY) return;
 
       try {
         console.log("Initializing Stream video client...");
 
         const user = {
-          id: authUser._id,
+          id: authUser._id.toString(),
           name: authUser.fullName,
-          image: authUser.profilePic,
+          image: authUser.profilePic || "",
         };
 
-        const videoClient = new StreamVideoClient({
+        videoClient = new StreamVideoClient({
           apiKey: STREAM_API_KEY,
           user,
           token: tokenData.token,
         });
 
-        const callInstance = videoClient.call("default", callId);
+        callInstance = videoClient.call("default", callId);
 
         await callInstance.join({ create: true });
 
@@ -71,7 +74,16 @@ const CallPage = () => {
     };
 
     initCall();
-  }, [tokenData, authUser, callId]);
+
+    return () => {
+      if (callInstance) {
+        callInstance.leave().catch((e) => console.warn("Call leave warning:", e));
+      }
+      if (videoClient) {
+        videoClient.disconnectUser().catch((e) => console.warn("Video disconnect warning:", e));
+      }
+    };
+  }, [tokenData?.token, authUser, callId]);
 
   if (isLoading || isConnecting) return <PageLoader />;
 

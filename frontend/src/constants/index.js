@@ -162,22 +162,45 @@ export const THEMES = [
   },
 ];
 
-export const LANGUAGES = [
-  "English",
-  "Spanish",
-  "French",
-  "German",
-  "Mandarin",
-  "Japanese",
-  "Korean",
-  "Hindi",
-  "Russian",
-  "Portuguese",
-  "Arabic",
-  "Italian",
-  "Turkish",
-  "Dutch",
+// Keep in sync with backend/src/lib/supportedLanguages.js. Codes are used for translation and speech.
+export const TRANSLATION_LANGUAGES = [
+  { name: "English", code: "en" },
+  { name: "Hindi", code: "hi" },
+  { name: "Marathi", code: "mr" },
+  { name: "Gujarati", code: "gu" },
+  { name: "Bengali", code: "bn" },
+  { name: "Tamil", code: "ta" },
+  { name: "Telugu", code: "te" },
+  { name: "Kannada", code: "kn" },
+  { name: "Malayalam", code: "ml" },
+  { name: "Punjabi", code: "pa" },
+  { name: "Odia", code: "or" },
+  { name: "Assamese", code: "as" },
+  { name: "Urdu", code: "ur" },
+  { name: "Sanskrit", code: "sa" },
+  { name: "Sindhi", code: "sd" },
+  { name: "Kashmiri", code: "ks" },
+  { name: "Konkani", code: "kok" },
+  { name: "Manipuri", code: "mni" },
+  { name: "Bodo", code: "brx" },
+  { name: "Dogri", code: "doi" },
+  { name: "Santali", code: "sat" },
+  { name: "Spanish", code: "es" },
+  { name: "French", code: "fr" },
+  { name: "German", code: "de" },
+  { name: "Mandarin", code: "zh" },
+  { name: "Japanese", code: "ja" },
+  { name: "Korean", code: "ko" },
+  { name: "Russian", code: "ru" },
+  { name: "Portuguese", code: "pt" },
+  { name: "Arabic", code: "ar" },
+  { name: "Italian", code: "it" },
+  { name: "Turkish", code: "tr" },
+  { name: "Dutch", code: "nl" },
 ];
+
+// Language names offered in onboarding and settings dropdowns.
+export const LANGUAGES = TRANSLATION_LANGUAGES.map((l) => l.name);
 
 export const LANGUAGE_TO_FLAG = {
   english: "gb",

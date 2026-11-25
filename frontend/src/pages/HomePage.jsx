@@ -12,7 +12,8 @@ import {
 import { getAvatarUrl, handleAvatarError } from "../lib/avatar";
 import { capitialize } from "../lib/utils";
 
-import FriendCard, { getLanguageFlag } from "../components/FriendCard";
+import FriendCard from "../components/FriendCard";
+import { getLanguageFlag } from "../lib/languageFlag";
 import NoFriendsFound from "../components/NoFriendsFound";
 
 const HomePage = () => {

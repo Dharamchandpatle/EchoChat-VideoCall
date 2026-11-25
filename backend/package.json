@@ -7,7 +7,11 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "sync:stream-users": "node src/scripts/syncStreamUsers.js"
+    "sync:stream-users": "node src/scripts/syncStreamUsers.js",
+    "admin:grant": "node src/scripts/grantAdmin.js",
+    "test": "node --test src/tests/grading.test.js src/tests/gemini.unit.test.js src/tests/units.test.js src/tests/translation.test.js src/tests/phase4.unit.test.js src/tests/http.test.js src/tests/origin.test.js src/tests/integration.test.js",
+    "test:seed": "node src/tests/learningSystem.test.js",
+    "test:unit": "node --test src/tests/grading.test.js src/tests/gemini.unit.test.js src/tests/units.test.js src/tests/translation.test.js src/tests/phase4.unit.test.js src/tests/http.test.js src/tests/origin.test.js"
   },
   "keywords": [
     "express",
@@ -18,18 +22,20 @@
   "author": "Your Name",
   "license": "ISC",
   "dependencies": {
-    "@google/generative-ai": "^0.12.0",
+    "@google/genai": "^2.32.0",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.0",
+    "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "stream-chat": "^8.60.0",
     "streamify": "file:.."
   },
   "devDependencies": {
+    "mongodb-memory-server": "^10.4.3",
     "nodemon": "^3.1.9"
   }
 }

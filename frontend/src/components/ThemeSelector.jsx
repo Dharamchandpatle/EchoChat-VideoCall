@@ -5,6 +5,13 @@ import { THEMES } from "../constants";
 const ThemeSelector = () => {
   const { theme, setTheme } = useThemeStore();
 
+  const handleSelectTheme = (themeName) => {
+    setTheme(themeName);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  };
+
   return (
     <div className="dropdown dropdown-end">
       {/* DROPDOWN TRIGGER */}
@@ -29,7 +36,7 @@ const ThemeSelector = () => {
                   : "hover:bg-base-content/5"
               }
             `}
-              onClick={() => setTheme(themeOption.name)}
+              onClick={() => handleSelectTheme(themeOption.name)}
             >
               <PaletteIcon className="size-4" />
               <span className="text-sm font-medium">{themeOption.label}</span>
